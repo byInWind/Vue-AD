@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue-bootstrap练习</title>
+    <link rel="stylesheet" href="lib/bootstrap.min.css">
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
+
+    <script src="lib/vue.min.js"></script>
+    <script>
+      window.onload=function () {
+        new Vue({
+          el:".container",
+          data:{
+            info:[],
+            username:'',
+            age:'',
+            nowIndex:2,
+            xx:''
+          },
+          methods:{
+            add:function(){
+              // if (localStorage.getItem('info')) {
+              //   this.info=localStorage.getItem('info')
+              // }
+                if (this.username) {
+                 this.info.push({
+                 username:this.username,
+                 age:this.age
+                 });
+                 this.username='';
+                 this.age=''    
+             }
+            },
+           del:function(n){
+              if (n==-9) {
+                this.info=[]
+              }else{
+                 this.info.splice(n,1);
+               }               
+              }
+            }
+        })
+      }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <form role="form">
+            <div class="form-group">
+                <label for="username">用户名:</label>
+                <input v-model='username' type="text" id="username" class="form-control" placeholder="输入用户名">
+            </div>
+            <div class="form-group">
+                <label for="age">年　龄:</label>
+                <input v-model='age' type="text" id="age" class="form-control" placeholder="输入年龄">
+            </div>
+            <div class="form-group">
+                <input type="button" value="添加" class="btn btn-primary" @click="add()">
+                <input type="button" value="重置" class="btn btn-danger">
+            </div>
+        </form>
+        <hr>
+        <table class="table table-bordered table-hover">
+            <caption class="h2 text-info">用户信息表</caption>
+            <tr class="text-danger">
+                <th class="text-center">序号</th>
+                <th class="text-center">名字</th>
+                <th class="text-center">年龄</th>
+                <th class="text-center">操作</th>
+            </tr>
+            <tr class="text-center" v-for="(item,index) in info">
+                <td>{{index+1}}</td>
+                <td>{{item.username}}</td>
+                <td>{{item.age}}</td>
+                <td>
+                    <input type="button" value="删除" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#layer" @click="nowIndex=index">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-right">
+                    <button  data-toggle="modal" data-target="#layer"  class="btn btn-danger btn-sm" @click="nowIndex=-9,xx='全部'">删除全部</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="text-center text-muted">
+                    <p>暂无数据....</p>
+                </td>
+            </tr>
+        </table>
+
+        <!--模态框 弹出框-->
+        <div class="modal fade bs-example-modal-sm" id="layer">
+            <div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                        <h4 class="modal-title delAll">确认删除{{xx}}么?</h4>
+                    </div>
+                    <div class="modal-body text-right">
+                        <button data-dismiss="modal" class="btn btn-primary btn-sm">取消</button>
+                        <button data-dismiss="modal" class="btn btn-danger btn-sm" @click="del(nowIndex)">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
